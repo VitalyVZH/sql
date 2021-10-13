@@ -98,5 +98,3 @@ WITH union_tables(model, price) AS (
     UNION
     SELECT model, price FROM Printer)
 SELECT model FROM union_tables WHERE price >= ALL(SELECT MAX(price) FROM union_tables);
-
-
