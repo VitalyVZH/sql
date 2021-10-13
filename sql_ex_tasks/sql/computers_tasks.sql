@@ -78,3 +78,23 @@ SELECT maker AS Maker, COUNT(model) AS Count_Model FROM Product WHERE type = 'PC
 --     Вывести: maker, максимальная цена.
 SELECT p.maker, MAX(pc.price) AS max FROM product AS p INNER JOIN pc ON p.model = pc.model GROUP BY p.maker;
 
+-- 22. Для каждого значения скорости ПК, превышающего 600 МГц, определите среднюю цену ПК с такой же скоростью.
+--     Вывести: speed, средняя цена.
+SELECT speed, AVG(price) AS avg FROM pc WHERE speed > '600' GROUP BY speed;
+
+-- 23. Найдите производителей, которые производили бы как ПК со скоростью не менее 750 МГц,
+--     так и ПК-блокноты со скоростью не менее 750 МГц. Вывести: Maker
+SELECT DISTINCT Product.maker FROM Product
+    INNER JOIN PC ON Product.model = PC.model WHERE PC.speed >= 750
+INTERSECT
+SELECT DISTINCT Product.maker FROM Product
+    INNER JOIN Laptop ON Product.model = Laptop.model WHERE Laptop.speed >= 750;
+
+-- 24. Перечислите номера моделей любых типов, имеющих самую высокую цену по всей имеющейся в базе данных продукции.
+WITH union_tables(model, price) AS (
+    SELECT model, price FROM PC
+    UNION
+    SELECT model, price FROM Laptop
+    UNION
+    SELECT model, price FROM Printer)
+SELECT model FROM union_tables WHERE price >= ALL(SELECT MAX(price) FROM union_tables);
