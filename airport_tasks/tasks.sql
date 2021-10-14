@@ -25,7 +25,7 @@ SELECT 'Seating data: '||seat_no AS  "Business class seats" FROM lanit.seats
 
 -- 9.	Найти максимальную и минимальную сумму бронирования в 2017 году;
 SELECT MAX(total_amount) AS MAX_SUM, MIN(total_amount) AS MIN_SUM FROM lanit.bookings
-    WHERE TRUNC(book_date) BETWEEN '01.01.17' AND '31.12.17';
+    WHERE TRUNC(book_date, 'YEAR') = '01.01.2017';
 
 -- 10.	Найти количество мест во всех самолетах;
 SELECT ad.model, COUNT(s.seat_no) AS NUMBER_OF_SEATS FROM lanit.seats s
@@ -50,7 +50,7 @@ SELECT passenger_name, COUNT(*) AS AMOUNT_TICKETS FROM lanit.tickets
 
 -- 14.	Вывести дни в сентябре 2017 с количеством рейсов больше 500.
 SELECT COUNT(*) AS "AMOUNT", TO_CHAR(date_departure, 'dd') AS "DATE"
-    FROM lanit.flights WHERE TRUNC(date_departure) BETWEEN '01.09.17' AND '30.09.17'
+    FROM lanit.flights WHERE TRUNC(date_departure, 'mm') = '01.09.17'
     GROUP BY TO_CHAR(date_departure, 'dd') HAVING COUNT(*) > 500
     ORDER BY TO_CHAR(date_departure, 'dd');
 
@@ -58,28 +58,28 @@ SELECT COUNT(*) AS "AMOUNT", TO_CHAR(date_departure, 'dd') AS "DATE"
 SELECT city, COUNT(*) AS AMOUNT FROM lanit.airports_data GROUP BY city HAVING COUNT(city) > 1;
 
 -- 16.	Вывести модель самолета и список мест в нем
-SELECT ad.model, s.seat_no AS SEATS FROM lanit.aircrafts_data ad
-    INNER JOIN lanit.seats s ON ad.aircraft_code = s.aircraft_code;
+SELECT ad.model, LISTAGG(s.seat_no, ', ') WITHIN GROUP (ORDER BY s.seat_no) AS SEATS FROM lanit.aircrafts_data ad
+    INNER JOIN lanit.seats s ON ad.aircraft_code = s.aircraft_code GROUP BY ad.model;
 
 -- 17.	Вывести информацию по всем рейсам из аэропортов в г.Москва за сентябрь 2017
 SELECT ad1.airport_name AS DEPARTURE, ad2.airport_name AS ARRIVAL FROM lanit.flights f
     INNER JOIN lanit.airports_data ad1 ON f.departure_airport = ad1.airport_code
     INNER JOIN lanit.airports_data ad2 ON f.arrival_airport = ad2.airport_code
-    WHERE ad1.city = 'Moscow' AND (TRUNC(f.date_departure) BETWEEN '01.01.17' AND '30.09.17')
+    WHERE ad1.city = 'Moscow' AND TRUNC(f.date_departure, 'mm') = '01.09.17'
     GROUP BY ad1.airport_name, ad2.airport_name
     ORDER BY ad1.airport_name, ad2.airport_name;
 
 -- 18.	Вывести кол-во рейсов по каждому аэропорту в г.Москва за 2017
 SELECT COUNT(*) AS SUM_FLIGHTS, ad.airport_name AS AIRPORT FROM lanit.flights f
     INNER JOIN lanit.airports_data ad ON f.departure_airport = ad.airport_code
-    WHERE ad.city = 'Moscow' AND (TRUNC(f.date_departure) BETWEEN '01.01.17' AND '31.12.17')
+    WHERE ad.city = 'Moscow' AND TRUNC(f.date_departure, 'yy') = '01.01.17'
     GROUP BY ad.airport_name;
 
 -- 19.	Вывести кол-во рейсов по каждому аэропорту, месяцу в г.Москва за 2017
 SELECT COUNT(ad.airport_name) AS SUM_FLIGHTS, TO_CHAR(f.date_departure, 'mm') AS MONTH, ad.airport_name
     FROM lanit.flights f
     INNER JOIN lanit.airports_data ad ON f.departure_airport = ad.airport_code
-    WHERE ad.city = 'Moscow' AND (TRUNC(f.date_departure) BETWEEN '01.01.17' AND '31.12.17')
+    WHERE ad.city = 'Moscow' AND TRUNC(f.date_departure, 'yy') =  '01.01.17'
     GROUP BY TO_CHAR(f.date_departure, 'mm'), ad.airport_name
     ORDER BY TO_CHAR(f.date_departure, 'mm'), ad.airport_name;
 
