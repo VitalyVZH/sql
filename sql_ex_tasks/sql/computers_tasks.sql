@@ -19,7 +19,7 @@ SELECT DISTINCT maker as Maker, laptop.speed FROM laptop
 	WHERE laptop.hd >= '10' ORDER BY Maker ASC, laptop.speed;
 
 -- 7. Найдите номера моделей и цены всех имеющихся в продаже продуктов (любого типа) производителя B (латинская буква).
-SELECT DISTINCT PC.model, PC.price FROM Product 
+SELECT DISTINCT PC.model, PC.price FROM Product
 	INNER JOIN PC ON Product.model = PC.model WHERE Product.maker = 'B'
 UNION 
 SELECT DISTINCT Laptop.model, Laptop.price FROM Product 
@@ -98,3 +98,5 @@ WITH union_tables(model, price) AS (
     UNION
     SELECT model, price FROM Printer)
 SELECT model FROM union_tables WHERE price >= ALL(SELECT MAX(price) FROM union_tables);
+
+
