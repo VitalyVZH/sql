@@ -19,7 +19,7 @@ SELECT DISTINCT maker as Maker, laptop.speed FROM laptop
 	WHERE laptop.hd >= '10' ORDER BY Maker ASC, laptop.speed;
 
 -- 7. Найдите номера моделей и цены всех имеющихся в продаже продуктов (любого типа) производителя B (латинская буква).
-SELECT DISTINCT PC.model, PC.price FROM Product 
+SELECT DISTINCT PC.model, PC.price FROM Product
 	INNER JOIN PC ON Product.model = PC.model WHERE Product.maker = 'B'
 UNION 
 SELECT DISTINCT Laptop.model, Laptop.price FROM Product 
@@ -98,3 +98,26 @@ WITH union_tables(model, price) AS (
     UNION
     SELECT model, price FROM Printer)
 SELECT model FROM union_tables WHERE price >= ALL(SELECT MAX(price) FROM union_tables);
+
+-- 25. Найдите производителей принтеров, которые производят ПК с наименьшим объемом RAM
+--     и с самым быстрым процессором среди всех ПК, имеющих наименьший объем RAM. Вывести: Maker
+SELECT DISTINCT maker FROM product
+    WHERE model IN (
+        SELECT model FROM pc
+            WHERE ram = (SELECT MIN(ram) FROM pc)
+            AND speed = (SELECT MAX(speed) FROM pc
+                WHERE ram = (SELECT MIN(ram) FROM pc)))
+    AND maker IN (
+        SELECT maker FROM product
+            WHERE type='printer'
+);
+
+-- 26. Найдите среднюю цену ПК и ПК-блокнотов, выпущенных производителем A.
+--     Вывести: одна общая средняя цена.
+WITH prices (price) AS (
+SELECT price FROM pc
+    INNER JOIN product AS p1 ON pc.model = p1.model WHERE p1.maker = 'A'
+UNION ALL
+SELECT price FROM laptop AS lt
+    INNER JOIN product AS p2 ON lt.model = p2.model WHERE p2.maker = 'A')
+SELECT AVG(price) AS AVG_price FROM prices;
