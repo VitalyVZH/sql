@@ -121,3 +121,17 @@ UNION ALL
 SELECT price FROM laptop AS lt
     INNER JOIN product AS p2 ON lt.model = p2.model WHERE p2.maker = 'A')
 SELECT AVG(price) AS AVG_price FROM prices;
+
+-- 27. Найдите средний размер диска ПК каждого из тех производителей, которые выпускают и принтеры.
+--     Вывести: maker, средний размер HD.
+SELECT p.maker, AVG(pc.hd) FROM product AS p
+    INNER JOIN pc ON p.model = pc.model
+    WHERE p.maker IN (
+        SELECT maker FROM product
+            WHERE type='printer')
+    GROUP BY p.maker;
+
+-- 28. Используя таблицу Product, определить количество производителей, выпускающих по одной модели.
+SELECT COUNT(nested.maker) AS qty FROM (
+    SELECT COUNT(model) AS amount, maker FROM product GROUP BY maker) AS nested
+    WHERE nested.amount = 1;

@@ -2,10 +2,14 @@
 
 **Схемы баз данных для задач:**
 
-Задачи с 1 по 13 и с 15 по 26:
+Задачи с 1 по 13 и с 15 по 28:
 
 ![Diagram_computers](resources/computers.gif)
 
-Задача 14:
+Задачи 14, 31:
 
 ![Diagram_ships](resources/ships.gif)
+
+Задача 29:
+
+![Diagram_income](resources/income.gif)
