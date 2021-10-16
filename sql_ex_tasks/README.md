@@ -6,6 +6,10 @@
 
 ![Diagram_computers](resources/computers.gif)
 
-Задача 14:
+Задачи 14, 31:
 
 ![Diagram_ships](resources/ships.gif)
+
+Задача 29:
+
+![Diagram_income](resources/income.gif)
