@@ -7,3 +7,8 @@ SELECT class, country FROM Classes WHERE bore >= 16.0;
 
 -- 33. Укажите корабли, потопленные в сражениях в Северной Атлантике (North Atlantic). Вывод: ship.
 SELECT ship FROM outcomes WHERE battle = 'North Atlantic' AND result = 'sunk';
+
+-- 36. Перечислите названия головных кораблей, имеющихся в базе данных (учесть корабли в Outcomes).
+SELECT name FROM Ships AS s WHERE s.name = s.class
+UNION
+SELECT ship FROM Outcomes AS o INNER JOIN Classes AS c ON o.ship = c.class;

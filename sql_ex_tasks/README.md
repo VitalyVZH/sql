@@ -6,7 +6,7 @@
 
 ![Diagram_computers](resources/computers.gif)
 
-Задачи 14, 31:
+Задачи 14, 31, 33, 36:
 
 ![Diagram_ships](resources/ships.gif)
 
